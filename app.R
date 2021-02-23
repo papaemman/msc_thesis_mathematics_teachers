@@ -48,7 +48,7 @@ library(DT)
 # pivotData1 <- pivotData %>% drop_na()
 
 
-poll.data  <- readxl::read_xlsx("Ερωτηματολόγιο Διπλωματικής Εργασίας (Απαντήσεις) (1).xlsx")
+poll.data  <- readxl::read_xlsx("data/Ερωτηματολόγιο Διπλωματικής Εργασίας (Απαντήσεις) (1).xlsx")
 
 raw_questions = colnames(poll.data)
 
@@ -194,8 +194,11 @@ server <- function(input, output) {
   
   output$q_enc_df <- renderDT({
     questions_map_df = data.frame("question" = raw_questions,
-                                  "question_code" = questions_map,
-                                  "type" = c("POSIXct", sapply(df[,setdiff(colnames(df), c("time"))], class)))
+                                  "question_code" = questions_map)
+    
+    questions_map_df$type = c("POSIXct",
+                              sapply(questions_map_df[,setdiff(colnames(questions_map_df), c("time"))], class))
+    
     DT::datatable(questions_map_df)
   })
   
